@@ -18,6 +18,7 @@ import com.swprojects.swfinancialapi.model.Categoria;
 import com.swprojects.swfinancialapi.repositories.CategoriaRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/categorias")
@@ -32,7 +33,7 @@ public class CategoriaResource {
   }
 
   @PostMapping
-  public ResponseEntity<Categoria> adicionar(@RequestBody Categoria categoria, HttpServletResponse response) {
+  public ResponseEntity<Categoria> adicionar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
     Categoria novaCategoria = categoriaRepository.save(categoria);
 
     URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
