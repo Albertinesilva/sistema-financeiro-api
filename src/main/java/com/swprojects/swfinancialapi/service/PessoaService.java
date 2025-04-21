@@ -1,4 +1,4 @@
-package com.swprojects.swfinancialapi.services;
+package com.swprojects.swfinancialapi.service;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.swprojects.swfinancialapi.model.Pessoa;
-import com.swprojects.swfinancialapi.repositories.PessoaRepository;
+import com.swprojects.swfinancialapi.repositorie.PessoaRepository;
 
 @Service
 public class PessoaService {

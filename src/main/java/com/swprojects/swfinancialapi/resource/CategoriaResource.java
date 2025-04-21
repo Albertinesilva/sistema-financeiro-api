@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.swprojects.swfinancialapi.event.RecursoCriadoEvent;
 import com.swprojects.swfinancialapi.model.Categoria;
-import com.swprojects.swfinancialapi.repositories.CategoriaRepository;
+import com.swprojects.swfinancialapi.repositorie.CategoriaRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

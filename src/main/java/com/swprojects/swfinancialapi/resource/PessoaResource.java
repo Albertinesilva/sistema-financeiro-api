@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.swprojects.swfinancialapi.event.RecursoCriadoEvent;
 import com.swprojects.swfinancialapi.model.Pessoa;
-import com.swprojects.swfinancialapi.repositories.PessoaRepository;
-import com.swprojects.swfinancialapi.services.PessoaService;
+import com.swprojects.swfinancialapi.repositorie.PessoaRepository;
+import com.swprojects.swfinancialapi.service.PessoaService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
