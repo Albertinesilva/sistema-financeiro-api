@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.swprojects.swfinancialapi.model.Lancamento;
+import com.swprojects.swfinancialapi.model.Pessoa;
 import com.swprojects.swfinancialapi.repositorie.LancamentoRepository;
+import com.swprojects.swfinancialapi.service.exception.PessoaInexistenteOuInativaException;
 
 @Service
 public class LancamentoService {
@@ -16,8 +18,15 @@ public class LancamentoService {
   @Autowired
   private LancamentoRepository lancamentoRepository;
 
+  @Autowired
+  private PessoaService pessoaService;
+
   @Transactional(readOnly = false)
   public Lancamento salvar(Lancamento lancamento) {
+    Pessoa pessoa = pessoaService.buscarPessoaPeloCodigo(lancamento.getPessoa().getCodigo());
+    if (pessoa == null || pessoa.isInativo()) {
+      throw new PessoaInexistenteOuInativaException();
+    }
     return lancamentoRepository.save(lancamento);
   }
 
@@ -28,6 +37,7 @@ public class LancamentoService {
 
   @Transactional(readOnly = true)
   public Lancamento buscarLancamentoPeloCodigo(Long codigo) {
-    return lancamentoRepository.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException("Lancamento não encontrada", 1));
+    return lancamentoRepository.findById(codigo)
+        .orElseThrow(() -> new EmptyResultDataAccessException("Lancamento não encontrada", 1));
   }
 }
