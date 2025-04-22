@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.swprojects.swfinancialapi.event.RecursoCriadoEvent;
 import com.swprojects.swfinancialapi.exceptionhandler.SwFinancialExceptionHandler.ErroResponse;
 import com.swprojects.swfinancialapi.model.Lancamento;
+import com.swprojects.swfinancialapi.repositorie.filter.LancamentoFilter;
 import com.swprojects.swfinancialapi.service.LancamentoService;
 import com.swprojects.swfinancialapi.service.exception.PessoaInexistenteOuInativaException;
 
@@ -48,8 +49,8 @@ public class LancamentoResource {
   }
 
   @GetMapping
-  public List<Lancamento> listar() {
-    return lancamentoService.listarTodos();
+  public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
+    return lancamentoService.filtrar(lancamentoFilter);
   }
 
   @GetMapping("/{codigo}")

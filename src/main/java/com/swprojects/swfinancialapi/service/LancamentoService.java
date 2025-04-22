@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.swprojects.swfinancialapi.model.Lancamento;
 import com.swprojects.swfinancialapi.model.Pessoa;
 import com.swprojects.swfinancialapi.repositorie.LancamentoRepository;
+import com.swprojects.swfinancialapi.repositorie.filter.LancamentoFilter;
 import com.swprojects.swfinancialapi.service.exception.PessoaInexistenteOuInativaException;
 
 @Service
@@ -39,5 +40,10 @@ public class LancamentoService {
   public Lancamento buscarLancamentoPeloCodigo(Long codigo) {
     return lancamentoRepository.findById(codigo)
         .orElseThrow(() -> new EmptyResultDataAccessException("Lancamento não encontrada", 1));
+  }
+
+  @Transactional(readOnly = true)
+  public List<Lancamento> filtrar(LancamentoFilter lancamentoFilter) {
+    return lancamentoRepository.filtrar(lancamentoFilter);
   }
 }
