@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -107,6 +109,22 @@ public class SwFinancialExceptionHandler extends ResponseEntityExceptionHandler 
     String mensagemDesenvolvedor = ex.getCause() != null ? ex.toString() : ex.toString();
     List<ErroResponse> erros = Arrays.asList(new ErroResponse(mensagemUsuario, mensagemDesenvolvedor));
     return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+  }
+
+  /**
+   * Trata exceções de violação de integridade de dados (ex: chave estrangeira).
+   *
+   * @param ex      Exceção lançada
+   * @param request Requisição atual
+   * @return ResponseEntity com mensagens de erro
+   */
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<Object> handleDataIntegrityViolationException(
+      DataIntegrityViolationException ex, WebRequest request) {
+    String mensagemUsuario = messageSource.getMessage("recurso.operacao-nao-permitida", null, LocaleContextHolder.getLocale());
+    String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
+    List<ErroResponse> erros = Arrays.asList(new ErroResponse(mensagemUsuario, mensagemDesenvolvedor));
+    return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
   /**
