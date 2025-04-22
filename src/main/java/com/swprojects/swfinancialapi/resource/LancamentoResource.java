@@ -44,9 +44,7 @@ public class LancamentoResource {
 
   @GetMapping("/{codigo}")
   public ResponseEntity<Lancamento> buscarPeloCodigo(@PathVariable Long codigo) {
-    return lancamentoService.buscarLancamentoPeloCodigo(codigo)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+    return ResponseEntity.ok(lancamentoService.buscarLancamentoPeloCodigo(codigo));
   }
 
 }

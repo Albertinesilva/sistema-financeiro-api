@@ -4,6 +4,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.swprojects.swfinancialapi.model.Pessoa;
 import com.swprojects.swfinancialapi.repositorie.PessoaRepository;
@@ -14,21 +15,33 @@ public class PessoaService {
   @Autowired
   private PessoaRepository pessoaRepository;
 
+  @Transactional(readOnly = false)
+  public Pessoa salvar(Pessoa pessoa) {
+    return pessoaRepository.save(pessoa);
+  }
+
+  @Transactional(readOnly = false)
   public Pessoa atualizar(Long codigo, Pessoa pessoa) {
-    Pessoa pessoaSalva = pessoaRepository.findById(codigo)
-        .orElseThrow(() -> new EmptyResultDataAccessException("Pessoa não encontrada", 1));
+    Pessoa pessoaSalva = buscarPessoaPeloCodigo(codigo);
     BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
     return pessoaRepository.save(pessoaSalva);
   }
 
+  @Transactional(readOnly = false)
   public void atualizarPropriedadeAtivo(Long codigo, Boolean ativo) {
-    Pessoa pessoaSalva = buscarPessoaPeloCodigo(codigo);
-    pessoaSalva.setAtivo(ativo);
-    pessoaRepository.save(pessoaSalva);
+    Pessoa pessoa = buscarPessoaPeloCodigo(codigo);
+    pessoa.setAtivo(ativo);
+    pessoaRepository.save(pessoa);
   }
 
-  private Pessoa buscarPessoaPeloCodigo(Long codigo) {
-    return pessoaRepository.findById(codigo)
+  @Transactional(readOnly = true)
+  public Pessoa buscarPessoaPeloCodigo(Long codigo) {
+    return pessoaRepository.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException("Pessoa não encontrada", 1));
+  }
+
+  public void remover(Long codigo) {
+    Pessoa p = pessoaRepository.findById(codigo)
         .orElseThrow(() -> new EmptyResultDataAccessException("Pessoa não encontrada", 1));
+    pessoaRepository.delete(p);
   }
 }

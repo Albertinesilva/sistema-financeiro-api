@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.swprojects.swfinancialapi.event.RecursoCriadoEvent;
 import com.swprojects.swfinancialapi.model.Categoria;
-import com.swprojects.swfinancialapi.repositorie.CategoriaRepository;
+import com.swprojects.swfinancialapi.service.CategoriaService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -25,26 +25,26 @@ import jakarta.validation.Valid;
 public class CategoriaResource {
 
   @Autowired
-  private CategoriaRepository categoriaRepository;
+  private CategoriaService categoriaService;
 
   @Autowired
   private ApplicationEventPublisher publisher;
 
-  @GetMapping
-  public List<Categoria> listar() {
-    return categoriaRepository.findAll();
-  }
-
   @PostMapping
-  public ResponseEntity<Categoria> adicionar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
-    Categoria novaCategoria = categoriaRepository.save(categoria);
+  public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
+    Categoria novaCategoria = categoriaService.salvar(categoria);
     publisher.publishEvent(new RecursoCriadoEvent(this, response, novaCategoria.getCodigo()));
     return ResponseEntity.status(HttpStatus.CREATED).body(novaCategoria);
   }
 
+  @GetMapping
+  public List<Categoria> listar() {
+    return categoriaService.listarTodos();
+  }
+
   @GetMapping("/{codigo}")
   public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo) {
-    return categoriaRepository.findById(codigo)
+    return categoriaService.buscarCategoriaPeloCodigo(codigo)
         .map(categoria -> ResponseEntity.ok(categoria))
         .orElse(ResponseEntity.notFound().build());
   }

@@ -1,10 +1,7 @@
 package com.swprojects.swfinancialapi.resource;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.swprojects.swfinancialapi.event.RecursoCriadoEvent;
 import com.swprojects.swfinancialapi.model.Pessoa;
-import com.swprojects.swfinancialapi.repositorie.PessoaRepository;
 import com.swprojects.swfinancialapi.service.PessoaService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,9 +26,6 @@ import jakarta.validation.Valid;
 public class PessoaResource {
 
     @Autowired
-    private PessoaRepository pessoaRepository;
-
-    @Autowired
     private PessoaService pessoaService;
 
     @Autowired
@@ -40,23 +33,20 @@ public class PessoaResource {
 
     @PostMapping
     public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
-        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
+        Pessoa pessoaSalva = pessoaService.salvar(pessoa);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Pessoa> buscarPeloCodigo(@PathVariable Long codigo) {
-        Optional<Pessoa> pessoa = pessoaRepository.findById(codigo);
-        return pessoa.isPresent() ? ResponseEntity.ok(pessoa.get()) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(pessoaService.buscarPessoaPeloCodigo(codigo));
     }
 
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long codigo) {
-        Pessoa p = pessoaRepository.findById(codigo)
-                .orElseThrow(() -> new EmptyResultDataAccessException("Pessoa não encontrada", 1));
-        pessoaRepository.delete(p);
+        pessoaService.remover(codigo);
     }
 
     @PutMapping("/{codigo}")
