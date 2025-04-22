@@ -2,7 +2,9 @@ package com.swprojects.swfinancialapi.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.swprojects.swfinancialapi.model.enums.TipoLancamento;
 
 import jakarta.persistence.Column;
@@ -27,10 +29,12 @@ public class Lancamento implements Serializable {
   private String descricao;
 
   @Column(name = "data_vencimento")
-  private String dataVencimento;
+  @JsonFormat(pattern = "dd/MM/yyyy")
+  private LocalDate dataVencimento;
 
   @Column(name = "data_pagamento")
-  private String dataPagamento;
+  @JsonFormat(pattern = "dd/MM/yyyy")
+  private LocalDate dataPagamento;
 
   private BigDecimal valor;
   private String observacao;
@@ -49,7 +53,7 @@ public class Lancamento implements Serializable {
   public Lancamento() {
   }
 
-  public Lancamento(Long codigo, String descricao, String dataVencimento, String dataPagamento, BigDecimal valor,
+  public Lancamento(Long codigo, String descricao, LocalDate dataVencimento, LocalDate dataPagamento, BigDecimal valor,
       String observacao, TipoLancamento tipo, Categoria categoria, Pessoa pessoa) {
     this.codigo = codigo;
     this.descricao = descricao;
@@ -78,19 +82,19 @@ public class Lancamento implements Serializable {
     this.descricao = descricao;
   }
 
-  public String getDataVencimento() {
+  public LocalDate getDataVencimento() {
     return dataVencimento;
   }
 
-  public void setDataVencimento(String dataVencimento) {
+  public void setDataVencimento(LocalDate dataVencimento) {
     this.dataVencimento = dataVencimento;
   }
 
-  public String getDataPagamento() {
+  public LocalDate getDataPagamento() {
     return dataPagamento;
   }
 
-  public void setDataPagamento(String dataPagamento) {
+  public void setDataPagamento(LocalDate dataPagamento) {
     this.dataPagamento = dataPagamento;
   }
 
