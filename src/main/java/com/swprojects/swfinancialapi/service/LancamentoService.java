@@ -46,4 +46,10 @@ public class LancamentoService {
   public List<Lancamento> filtrar(LancamentoFilter lancamentoFilter) {
     return lancamentoRepository.filtrar(lancamentoFilter);
   }
+
+  public void remover(Long codigo) {
+    Lancamento lancamento = lancamentoRepository.findById(codigo)
+        .orElseThrow(() -> new EmptyResultDataAccessException("Pessoa não encontrada", 1));
+    lancamentoRepository.deleteById(lancamento.getCodigo());
+  }
 }
