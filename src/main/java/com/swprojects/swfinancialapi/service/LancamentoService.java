@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +45,8 @@ public class LancamentoService {
   }
 
   @Transactional(readOnly = true)
-  public List<Lancamento> filtrar(LancamentoFilter lancamentoFilter) {
-    return lancamentoRepository.filtrar(lancamentoFilter);
+  public Page<Lancamento> filtrar(LancamentoFilter lancamentoFilter, Pageable pageable) {
+    return lancamentoRepository.filtrar(lancamentoFilter, pageable);
   }
 
   public void remover(Long codigo) {

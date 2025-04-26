@@ -1,11 +1,12 @@
 package com.swprojects.swfinancialapi.repositorie.lancamento;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.swprojects.swfinancialapi.model.Lancamento;
 import com.swprojects.swfinancialapi.repositorie.filter.LancamentoFilter;
 
 public interface LancamentoRepositoryQuery {
 
-  public List<Lancamento> filtrar(LancamentoFilter lancamentoFilter);
+  public Page<Lancamento> filtrar(LancamentoFilter lancamentoFilter, Pageable pageable);
 }
