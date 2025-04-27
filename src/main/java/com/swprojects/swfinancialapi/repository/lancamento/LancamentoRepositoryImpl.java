@@ -1,24 +1,24 @@
-package com.swprojects.swfinancialapi.repositorie.lancamento;
+package com.swprojects.swfinancialapi.repository.lancamento;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import com.swprojects.swfinancialapi.model.Lancamento;
+import com.swprojects.swfinancialapi.model.Lancamento_;
+import com.swprojects.swfinancialapi.repository.filter.LancamentoFilter;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.ObjectUtils;
-
-import com.swprojects.swfinancialapi.model.Lancamento;
-import com.swprojects.swfinancialapi.model.Lancamento_;
-import com.swprojects.swfinancialapi.repositorie.filter.LancamentoFilter;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 
 public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 

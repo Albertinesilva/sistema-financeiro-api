@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.swprojects.swfinancialapi.model.Categoria;
-import com.swprojects.swfinancialapi.repositorie.CategoriaRepository;
+import com.swprojects.swfinancialapi.repository.CategoriaRepository;
 
 @Service
 public class CategoriaService {

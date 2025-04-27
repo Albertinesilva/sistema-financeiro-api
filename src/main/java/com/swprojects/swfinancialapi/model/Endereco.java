@@ -1,6 +1,6 @@
 package com.swprojects.swfinancialapi.model;
 
-import jakarta.persistence.Embeddable;
+import javax.persistence.Embeddable;
 
 @Embeddable
 public class Endereco {

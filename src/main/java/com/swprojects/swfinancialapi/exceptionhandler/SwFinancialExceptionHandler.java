@@ -13,7 +13,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.NonNull;
@@ -49,7 +48,7 @@ public class SwFinancialExceptionHandler extends ResponseEntityExceptionHandler 
   @Override
   protected ResponseEntity<Object> handleHttpMessageNotReadable(@NonNull HttpMessageNotReadableException ex,
       @NonNull HttpHeaders headers,
-      @NonNull HttpStatusCode status, @NonNull WebRequest request) {
+      @NonNull HttpStatus status, @NonNull WebRequest request) {
 
     String mensagemUsuario = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
     String mensagemDesenvolvedor = Optional.ofNullable(ex.getCause()).orElse(ex).toString();
@@ -71,7 +70,7 @@ public class SwFinancialExceptionHandler extends ResponseEntityExceptionHandler 
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex,
       @NonNull HttpHeaders headers,
-      @NonNull HttpStatusCode status, @NonNull WebRequest request) {
+      @NonNull HttpStatus status, @NonNull WebRequest request) {
 
     List<ErroResponse> erros = criarListaDeErros(ex.getBindingResult());
     return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);

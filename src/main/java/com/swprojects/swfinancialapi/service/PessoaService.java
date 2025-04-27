@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.swprojects.swfinancialapi.model.Pessoa;
-import com.swprojects.swfinancialapi.repositorie.PessoaRepository;
+import com.swprojects.swfinancialapi.repository.PessoaRepository;
 
 @Service
 public class PessoaService {

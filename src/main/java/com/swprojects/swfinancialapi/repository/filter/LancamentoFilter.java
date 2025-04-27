@@ -1,4 +1,4 @@
-package com.swprojects.swfinancialapi.repositorie.filter;
+package com.swprojects.swfinancialapi.repository.filter;
 
 import java.time.LocalDate;
 

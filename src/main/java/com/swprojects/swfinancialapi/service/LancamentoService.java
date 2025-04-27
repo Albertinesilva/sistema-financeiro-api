@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.swprojects.swfinancialapi.model.Lancamento;
 import com.swprojects.swfinancialapi.model.Pessoa;
-import com.swprojects.swfinancialapi.repositorie.LancamentoRepository;
-import com.swprojects.swfinancialapi.repositorie.filter.LancamentoFilter;
+import com.swprojects.swfinancialapi.repository.LancamentoRepository;
+import com.swprojects.swfinancialapi.repository.filter.LancamentoFilter;
 import com.swprojects.swfinancialapi.service.exception.PessoaInexistenteOuInativaException;
 
 @Service

@@ -2,6 +2,9 @@ package com.swprojects.swfinancialapi.resource;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -16,9 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.swprojects.swfinancialapi.event.RecursoCriadoEvent;
 import com.swprojects.swfinancialapi.model.Categoria;
 import com.swprojects.swfinancialapi.service.CategoriaService;
-
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/categorias")

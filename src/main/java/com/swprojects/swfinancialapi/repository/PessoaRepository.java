@@ -1,4 +1,4 @@
-package com.swprojects.swfinancialapi.repositorie;
+package com.swprojects.swfinancialapi.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
