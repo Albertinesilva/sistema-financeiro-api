@@ -53,16 +53,6 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(HttpSecurity http) throws Exception {
-
-    // http.authorizeRequests()
-    // .antMatchers("/categorias").permitAll()
-    // .anyRequest().authenticated()
-    // .and()
-    // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    // .and()
-    // .csrf().disable()
-    // .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
-
     http
         .authorizeHttpRequests(auth -> auth
             .antMatchers("/categorias").permitAll()
