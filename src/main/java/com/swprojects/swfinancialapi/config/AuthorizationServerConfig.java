@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -23,23 +22,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   private AuthenticationManager authenticationManager;
 
   @Autowired
-  private PasswordEncoder passwordEncoder;
-
-  @Autowired
   private UserDetailsService userDetailsService;
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
     clients.inMemory()
         .withClient("angular")
-        .secret(passwordEncoder.encode("@ngul@r0")) // @ngul@r0
+        .secret("$2a$10$UAc049fUm6Bxy8X/.mpn8.PfD2ncb4ZgvmEa5Hb.JOGVJNX1ampgG") // @ngul@r0
         .scopes("read", "write")
         .authorizedGrantTypes("password", "refresh_token")
         .accessTokenValiditySeconds(20) // 20 seconds
         .refreshTokenValiditySeconds(3600 * 24) // 1 day
         .and()
         .withClient("mobile")
-        .secret(passwordEncoder.encode("m0b1l30")) // m0b1l30
+        .secret("$2a$10$UAc049fUm6Bxy8X/.mpn8.PfD2ncb4ZgvmEa5Hb.JOGVJNX1ampgG") // m0b1l30
         .scopes("read")
         .authorizedGrantTypes("password", "refresh_token")
         .accessTokenValiditySeconds(20) // 20 seconds

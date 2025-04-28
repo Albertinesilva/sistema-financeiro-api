@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +18,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,31 +25,14 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
-  // @Override
-  // protected void configure(AuthenticationManagerBuilder auth) throws Exception
-  // {
-  // auth.inMemoryAuthentication()
-  // .withUser("admin@algamoney.com")
-  // .password("admin")
-  // .roles("ROLE");
-  // }
-
-  @Bean
-  public UserDetailsService userDetailsService() {
-    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-    manager.createUser(User.withUsername("admin@algamoney.com")
-        .password(passwordEncoder().encode("admin"))
-        .roles("ADMIN")
-        .build());
-    return manager;
-  }
+  @Autowired
+  private UserDetailsService userDetailsService;
 
   @Override
   public void configure(HttpSecurity http) throws Exception {
@@ -65,32 +48,27 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
-  public JwtDecoder jwtDecoder() {
-    var secretKey = new SecretKeySpec("3032885ba9cd6621bcc4e7d6b6c35c2b".getBytes(), "HmacSHA256");
-    return NimbusJwtDecoder.withSecretKey(secretKey).build();
+  @Override
+  protected AuthenticationManager authenticationManager() throws Exception {
+    return super.authenticationManager();
+  }
+
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
 
   // @Bean
-  // @Override
-  // protected AuthenticationManager authenticationManager() throws Exception {
-  // return super.authenticationManager();
-  // }
+  // public AuthenticationManager authenticationManager(HttpSecurity http) throws
+  // Exception {
+  // AuthenticationManagerBuilder authenticationManagerBuilder = http
+  // .getSharedObject(AuthenticationManagerBuilder.class);
 
-  @Bean
-  public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-    AuthenticationManagerBuilder authenticationManagerBuilder = http
-        .getSharedObject(AuthenticationManagerBuilder.class);
+  // authenticationManagerBuilder
+  // .userDetailsService(userDetailsService()) // Usa o seu bean aqui
+  // .passwordEncoder(passwordEncoder());
 
-    authenticationManagerBuilder
-        .userDetailsService(userDetailsService()) // Usa o seu bean aqui
-        .passwordEncoder(passwordEncoder());
-
-    return authenticationManagerBuilder.build();
-  }
-
-  // @Bean
-  // public PasswordEncoder passwordEncoder() {
-  // return NoOpPasswordEncoder.getInstance();
+  // return authenticationManagerBuilder.build();
   // }
 
   @Bean
@@ -98,11 +76,11 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder(); // Usando BCrypt para codificação de senhas
   }
 
-  // @Bean
-  // @Override
-  // public UserDetailsService userDetailsServiceBean() throws Exception {
-  // return super.userDetailsServiceBean();
-  // }
+  @Bean
+  public JwtDecoder jwtDecoder() {
+    var secretKey = new SecretKeySpec("3032885ba9cd6621bcc4e7d6b6c35c2b".getBytes(), "HmacSHA256");
+    return NimbusJwtDecoder.withSecretKey(secretKey).build();
+  }
 
   private JwtAuthenticationConverter jwtAuthenticationConverter() {
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
