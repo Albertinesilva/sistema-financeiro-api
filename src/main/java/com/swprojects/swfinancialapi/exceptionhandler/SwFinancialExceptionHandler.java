@@ -84,14 +84,14 @@ public class SwFinancialExceptionHandler extends ResponseEntityExceptionHandler 
    * @param request Requisição atual
    * @return ResponseEntity com mensagens de erro
    */
-  @ExceptionHandler(RuntimeException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public ResponseEntity<Object> handleRuntimeException(RuntimeException ex, WebRequest request) {
-    String mensagemUsuario = messageSource.getMessage("recurso.nao-encontrado", null, LocaleContextHolder.getLocale());
-    String mensagemDesenvolvedor = ex.getCause() != null ? ex.toString() : ex.toString();
-    List<ErroResponse> erros = Arrays.asList(new ErroResponse(mensagemUsuario, mensagemDesenvolvedor));
-    return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
-  }
+  // @ExceptionHandler(RuntimeException.class)
+  // @ResponseStatus(HttpStatus.NOT_FOUND)
+  // public ResponseEntity<Object> handleRuntimeException(RuntimeException ex, WebRequest request) {
+  //   String mensagemUsuario = messageSource.getMessage("recurso.nao-encontrado", null, LocaleContextHolder.getLocale());
+  //   String mensagemDesenvolvedor = ex.getCause() != null ? ex.toString() : ex.toString();
+  //   List<ErroResponse> erros = Arrays.asList(new ErroResponse(mensagemUsuario, mensagemDesenvolvedor));
+  //   return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+  // }
 
   /**
    * Trata a exceção lançada ao tentar deletar um recurso inexistente no banco.
