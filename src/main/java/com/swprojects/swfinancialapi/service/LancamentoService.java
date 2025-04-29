@@ -13,6 +13,7 @@ import com.swprojects.swfinancialapi.model.Lancamento;
 import com.swprojects.swfinancialapi.model.Pessoa;
 import com.swprojects.swfinancialapi.repository.LancamentoRepository;
 import com.swprojects.swfinancialapi.repository.filter.LancamentoFilter;
+import com.swprojects.swfinancialapi.repository.projection.ResumoLancamento;
 import com.swprojects.swfinancialapi.service.exception.PessoaInexistenteOuInativaException;
 
 @Service
@@ -47,6 +48,11 @@ public class LancamentoService {
   @Transactional(readOnly = true)
   public Page<Lancamento> filtrar(LancamentoFilter lancamentoFilter, Pageable pageable) {
     return lancamentoRepository.filtrar(lancamentoFilter, pageable);
+  }
+
+  @Transactional(readOnly = true)
+  public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+    return lancamentoRepository.resumir(lancamentoFilter, pageable);
   }
 
   public void remover(Long codigo) {

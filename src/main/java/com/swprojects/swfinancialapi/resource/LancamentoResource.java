@@ -30,6 +30,7 @@ import com.swprojects.swfinancialapi.event.RecursoCriadoEvent;
 import com.swprojects.swfinancialapi.exceptionhandler.SwFinancialExceptionHandler.ErroResponse;
 import com.swprojects.swfinancialapi.model.Lancamento;
 import com.swprojects.swfinancialapi.repository.filter.LancamentoFilter;
+import com.swprojects.swfinancialapi.repository.projection.ResumoLancamento;
 import com.swprojects.swfinancialapi.service.LancamentoService;
 import com.swprojects.swfinancialapi.service.exception.PessoaInexistenteOuInativaException;
 
@@ -50,6 +51,12 @@ public class LancamentoResource {
   @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and hasAuthority('SCOPE_read')")
   public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
     return lancamentoService.filtrar(lancamentoFilter, pageable);
+  }
+
+  @GetMapping(params = "resumo")
+  @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and hasAuthority('SCOPE_read')")
+  public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+    return lancamentoService.resumir(lancamentoFilter, pageable);
   }
 
   @GetMapping("/{codigo}")
