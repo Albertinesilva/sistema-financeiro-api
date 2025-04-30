@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import com.swprojects.swfinancialapi.config.token.CustomTokenEnhancer;
 
 @SuppressWarnings("deprecation")
+@Profile("oauth-security")
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -41,7 +43,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         .secret("$2a$10$UAc049fUm6Bxy8X/.mpn8.PfD2ncb4ZgvmEa5Hb.JOGVJNX1ampgG") // @ngul@r0
         .scopes("read", "write")
         .authorizedGrantTypes("password", "refresh_token")
-        .accessTokenValiditySeconds(1800)
+        .accessTokenValiditySeconds(1800) 
         .refreshTokenValiditySeconds(3600 * 24)
         .and()
         .withClient("mobile")
@@ -59,9 +61,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     endpoints
         .authenticationManager(authenticationManager)
         .tokenEnhancer(tokenEnhancerChain)
-        .accessTokenConverter(accessTokenConverter())
-        .tokenStore(tokenStore())
         .userDetailsService(userDetailsService)
+        .tokenStore(tokenStore())
         .reuseRefreshTokens(false);
   }
 
