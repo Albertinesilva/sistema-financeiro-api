@@ -3,6 +3,8 @@ package com.swprojects.swfinancialapi.service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,12 +38,19 @@ public class PessoaService {
 
   @Transactional(readOnly = true)
   public Pessoa buscarPessoaPeloCodigo(Long codigo) {
-    return pessoaRepository.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException("Pessoa não encontrada", 1));
+    return pessoaRepository.findById(codigo)
+        .orElseThrow(() -> new EmptyResultDataAccessException("Pessoa não encontrada", 1));
   }
 
+  @Transactional(readOnly = false)
   public void remover(Long codigo) {
     Pessoa p = pessoaRepository.findById(codigo)
         .orElseThrow(() -> new EmptyResultDataAccessException("Pessoa não encontrada", 1));
     pessoaRepository.delete(p);
+  }
+
+  @Transactional(readOnly = true)
+  public Page<Pessoa> findByNomeContaining(String nome, Pageable pageable) {
+    return pessoaRepository.findByNomeContaining(nome, pageable);
   }
 }
