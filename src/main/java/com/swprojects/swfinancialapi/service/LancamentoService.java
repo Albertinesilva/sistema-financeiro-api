@@ -1,7 +1,9 @@
 package com.swprojects.swfinancialapi.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -60,4 +62,37 @@ public class LancamentoService {
         .orElseThrow(() -> new EmptyResultDataAccessException("Pessoa não encontrada", 1));
     lancamentoRepository.deleteById(lancamento.getCodigo());
   }
+
+  @Transactional(readOnly = false)
+  public Lancamento atualizar(Long codigo, Lancamento lancamento) {
+    Lancamento lancamentoSalvo = buscarLancamentoExistente(codigo);
+    if (!lancamento.getPessoa().equals(lancamentoSalvo.getPessoa())) {
+      validarPessoa(lancamento);
+    }
+
+    BeanUtils.copyProperties(lancamento, lancamentoSalvo, "codigo");
+    return lancamentoRepository.save(lancamentoSalvo);
+  }
+
+  private void validarPessoa(Lancamento lancamento) {
+    Optional<Pessoa> pessoa = Optional.ofNullable(
+        lancamento.getPessoa().getCodigo() != null
+            ? pessoaService.buscarPessoaPeloCodigo(lancamento.getPessoa().getCodigo())
+            : null);
+
+    if (pessoa.isEmpty() || pessoa.get().isInativo()) {
+      throw new PessoaInexistenteOuInativaException();
+    }
+  }
+
+  private Lancamento buscarLancamentoExistente(Long codigo) {
+
+    // Optional<Lancamento> lancamentoSalvo = lancamentoRepository.findById(codigo);
+    // if (lancamentoSalvo.isEmpty()) {
+    // throw new IllegalArgumentException();
+    // }
+
+    return lancamentoRepository.findById(codigo).orElseThrow(() -> new IllegalArgumentException());
+  }
+
 }
